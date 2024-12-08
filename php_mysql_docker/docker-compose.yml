@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: securepassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  webadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_ui
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: securepassword
+    ports:
+      - "8080:80"
+
+  application:
+    image: php:7.4-apache
+    container_name: php_apache_server
+    volumes:
+      - ./www:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+
+volumes:
+  mysql_data:
+    driver: local

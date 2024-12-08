@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  monitoring:
+    image: jasonrivers/nagios:latest
+    container_name: monitoring_nagios
+    ports:
+      - "8080:80"
+    volumes:
+      - config_volume:/opt/nagios/etc
+      - var_volume:/var/nagios
+      - plugins_volume:/opt/Custom-Nagios-Plugins
+    environment:
+      - NAGIOS_USER=nagiosadmin
+      - NAGIOS_PASS=12345
+    restart: always
+
+volumes:
+  config_volume:
+  var_volume:
+  plugins_volume:
